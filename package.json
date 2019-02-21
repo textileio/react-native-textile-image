@@ -5,6 +5,10 @@
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/textileio/react-native-textile-image.git"
+  },
   "files": [
     "dist/*",
     "ios/*",
