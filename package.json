@@ -1,7 +1,7 @@
 
 {
   "name": "@textile/react-native-textile-image",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -29,7 +29,7 @@
     "react-native": "*"
   },
   "devDependencies": {
-    "@textile/react-native-sdk": "1.1.0-rc13",
+    "@textile/react-native-sdk": "1.1.0-rc46",
     "@types/enzyme": "^3.1.14",
     "@types/enzyme-adapter-react-16": "^1.0.3",
     "@types/jest": "^23.3.3",

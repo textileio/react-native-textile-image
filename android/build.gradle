@@ -50,7 +50,7 @@ repositories {
 dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
     api project(':@textile_react-native-sdk')
-    api project(':textilego')
+    api project(':mobile')
 }
 
 task wrapper(type: Wrapper) {
