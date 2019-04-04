@@ -31,6 +31,14 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
   self.needsRenderImage = true;
 }
 
+
+- (void)setIpfs:(BOOL)ipfs {
+  if (_ipfs != ipfs) {
+    _ipfs = ipfs;
+  }
+  self.needsRenderImage = true;
+}
+
 - (void)setIndex:(int)index {
   if (_index != index) {
     _index = index;
@@ -68,18 +76,25 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
       NSError *error;
       UIImage *image;
-      NSString *jsonString;
-      NSString *path = [NSString stringWithFormat:@"%@/%d", self.target, self.index];
-      jsonString = [self->_bridge.textileNode _imageFileDataForMinWidth:path minWidth:self.forMinWidth error:&error];
-      if (jsonString) {
-        NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-        NSError *error;
-        id json = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
-        NSDictionary *dict = (NSDictionary *)json;
-        NSString *urlString = [dict objectForKey:@"url"];
-        NSURL *url = [NSURL URLWithString:urlString];
-        NSData *imageData = [NSData dataWithContentsOfURL:url];
-        image = [UIImage imageWithData:imageData scale:1];
+      if (self.ipfs) {
+        NSData *imageData = [self->_bridge.textileNode _dataAtPath:self.target error:&error];
+        if (imageData) {
+          image = [UIImage imageWithData:imageData scale:1];
+        }
+      } else {
+        NSString *jsonString;
+        NSString *path = [NSString stringWithFormat:@"%@/%d", self.target, self.index];
+        jsonString = [self->_bridge.textileNode _imageFileDataForMinWidth:path minWidth:self.forMinWidth error:&error];
+        if (jsonString) {
+          NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+          NSError *error;
+          id json = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+          NSDictionary *dict = (NSDictionary *)json;
+          NSString *urlString = [dict objectForKey:@"url"];
+          NSURL *url = [NSURL URLWithString:urlString];
+          NSData *imageData = [NSData dataWithContentsOfURL:url];
+          image = [UIImage imageWithData:imageData scale:1];
+        }
       }
       dispatch_async(dispatch_get_main_queue(), ^{
         if (error) {
